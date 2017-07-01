@@ -27,6 +27,10 @@ yargs
 	.option('ignore-rename', {
 		describe: 'Ignore when a file is renamed',
 		type: 'boolean'
+	})
+	.option('run-on-start', {
+		describe: 'Run the command after startup',
+		type: 'boolean'
 	});
 
 var argv = yargs.argv;
@@ -76,6 +80,10 @@ gaze(pattern, function(err, watcher) {
 			run(newPath);
 		}
 	});
+
+	if(argv['run-on-start']) {
+		run('');
+	};
 });
 
 // Function to run when something changes
@@ -85,6 +93,7 @@ function run(filepath) {
 	if (!argv.silent) {
 		console.log('>', uniqueCommand);
 	}
+
 	execshell(uniqueCommand);
 	if (!argv.silent) {
 		console.log('Finished in', prettyHrtime(process.hrtime(startTime)));
